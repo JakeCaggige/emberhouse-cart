@@ -25,10 +25,11 @@
     var he = document.querySelector('[data-eh="product-handle"]');
     var handle = (he && he.textContent.trim()) || decodeURIComponent((location.pathname.split("/").filter(Boolean).pop() || ""));
     if (!handle) return;
-    sf('query($h:String!){product(handle:$h){variants(first:100){nodes{id availableForSale price{amount currencyCode} selectedOptions{name value}}}}}', { h: handle })
+    sf('query($h:String!){product(handle:$h){featuredImage{url} variants(first:100){nodes{id availableForSale image{url} price{amount currencyCode} selectedOptions{name value}}}}}', { h: handle })
       .then(function (d) {
         if (!d.product) return;
         var vs = d.product.variants.nodes;
+        var feat = d.product.featuredImage && d.product.featuredImage.url;
         if (!vs.length) return;
         var names = vs[0].selectedOptions.map(function (o) { return o.name; });
         var sel = {};
@@ -54,6 +55,8 @@
             add = document.querySelector('[data-eh="add-to-cart"]'),
             price = document.querySelector('[data-eh="variant-price"]');
           if (price) price.textContent = v ? money(v.price) : "";
+          var img = document.querySelector('[data-eh="main-image"]');
+          if (img && ((v && v.image) || feat)) img.setAttribute("src", (v && v.image && v.image.url) || feat);
           if (add) {
             var ok = v && v.availableForSale;
             add.setAttribute("data-variant-id", ok ? v.id : "");
