@@ -32,7 +32,11 @@
         var feat = d.product.featuredImage && d.product.featuredImage.url;
         if (!vs.length) return;
         var names = vs[0].selectedOptions.map(function (o) { return o.name; });
-        var sel = {};
+        var sel = {}, qty = 1;
+        function syncQty() {
+          var q = document.querySelector('[data-eh="qty"]'); if (q) q.textContent = qty;
+          var a = document.querySelector('[data-eh="add-to-cart"]'); if (a) a.setAttribute("data-qty", qty);
+        }
         function valuesFor(name) {
           var s = [];
           vs.forEach(function (v) { v.selectedOptions.forEach(function (o) { if (o.name === name && s.indexOf(o.value) < 0) s.push(o.value); }); });
@@ -61,10 +65,12 @@
             var ok = v && v.availableForSale;
             add.setAttribute("data-variant-id", ok ? v.id : "");
             add.classList.toggle("is-soldout", !ok);
-            add.textContent = ok ? "Add to Cart" : (v ? "Sold Out" : "Unavailable");
+            add.textContent = ok ? "ADD" : (v ? "SOLD OUT" : "UNAVAILABLE");
           }
         }
         document.addEventListener("click", function (e) {
+          if (e.target.closest('[data-eh="qty-inc"]')) { e.preventDefault(); qty++; syncQty(); return; }
+          if (e.target.closest('[data-eh="qty-dec"]')) { e.preventDefault(); qty = Math.max(1, qty - 1); syncQty(); return; }
           var b = e.target.closest(".eh-opt");
           if (!b) return;
           e.preventDefault();
@@ -72,6 +78,7 @@
           apply();
         });
         apply();
+        syncQty();
       })
       .catch(function (e) { console.warn("variant-picker:", e.message); });
   }
