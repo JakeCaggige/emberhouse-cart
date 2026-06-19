@@ -27,9 +27,9 @@
   var EH = window.EH = {
     get: function () { return cart; },
     load: function () {
-      if (!cartId) return;
+      if (!cartId) { if (EH.onCart) EH.onCart(null); return; }
       gql("query($id:ID!){cart(id:$id)" + CART + "}", { id: cartId }).then(function (d) {
-        if (!d.cart) { localStorage.removeItem(KEY); cartId = null; } else set(d.cart);
+        if (!d.cart) { localStorage.removeItem(KEY); cartId = null; if (EH.onCart) EH.onCart(null); } else set(d.cart);
       }).catch(function () {});
     },
     add: function (id, q) {
