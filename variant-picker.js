@@ -9,6 +9,12 @@
  * Selected option buttons get class .is-selected; unavailable add button gets .is-soldout.
  */
 (function () {
+  // Inject buy-box styling (Webflow's embed CSS gets overridden by page defaults; JS-injected !important wins).
+  (function () {
+    var c = ".eh-buybox{font-family:'Space Mono',monospace}.eh-opt-label{font-size:13px!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.08em;color:#3E3F24!important;margin-bottom:10px;font-family:'Space Mono',monospace!important}.eh-opt-group{margin-bottom:22px}.eh-opt-row{display:flex;flex-wrap:wrap;gap:12px}.eh-opt{font-family:'Space Mono',monospace!important;font-size:15px!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.02em;padding:14px 22px!important;border:none!important;border-radius:10px!important;background:#EAE3D2!important;color:#3E3F24!important;cursor:pointer;transition:background .15s,color .15s}.eh-opt:hover{background:#e1d9c4!important}.eh-opt.is-selected{background:#8a9a45!important;color:#F6F2E9!important}.eh-buy-row{display:flex;align-items:center;gap:16px;margin-top:8px}.eh-qty{display:flex;align-items:center;gap:4px;border:1.5px solid #C9C2AC!important;border-radius:999px;padding:5px 8px;background:transparent!important}.eh-qty-btn{font-family:'Space Mono',monospace!important;font-size:18px!important;line-height:1;width:34px;height:34px;border:none!important;background:transparent!important;color:#3E3F24!important;cursor:pointer;border-radius:50%;box-shadow:none!important}.eh-qty-btn:hover{background:#EAE3D2!important}.eh-qty-num{font-family:'Space Mono',monospace!important;font-size:16px!important;font-weight:700!important;color:#3E3F24!important;min-width:26px;text-align:center}.eh-add{flex:1;font-family:'Space Mono',monospace!important;font-size:22px!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.04em;text-align:center;background:#BE5920!important;color:#fff!important;border:none!important;border-radius:999px!important;padding:18px 32px!important;cursor:pointer;text-decoration:none}.eh-add:hover{background:#a94d1a!important}.eh-add.is-soldout{background:#ABA48B!important;pointer-events:none}";
+    var s = document.createElement("style"); s.textContent = c;
+    (document.head || document.documentElement).appendChild(s);
+  })();
   var DOMAIN = "emberhouse-d3v5uvbe.myshopify.com",
     TOKEN = "6b3eb8f11bab4fcce7cc7bc2917a9a08",
     VERSION = "2026-04";
