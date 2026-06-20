@@ -5,7 +5,7 @@
     TOKEN = "6b3eb8f11bab4fcce7cc7bc2917a9a08", // Storefront public token (safe in browser)
     VERSION = "2026-04", KEY = "eh_cart_id";
   var cartId = localStorage.getItem(KEY), cart = null;
-  var CART = "{id checkoutUrl totalQuantity cost{subtotalAmount{amount currencyCode}} lines(first:50){nodes{id quantity merchandise{... on ProductVariant{id title image{url} price{amount currencyCode} product{title}}}}}}";
+  var CART = "{id checkoutUrl totalQuantity cost{subtotalAmount{amount currencyCode}} lines(first:50){nodes{id quantity merchandise{... on ProductVariant{id title image{url} selectedOptions{name value} price{amount currencyCode} product{title handle}}}}}}";
   function gql(q, v) {
     return fetch("https://" + DOMAIN + "/api/" + VERSION + "/graphql.json", {
       method: "POST",
@@ -26,6 +26,7 @@
   }
   var EH = window.EH = {
     get: function () { return cart; },
+    query: gql,
     load: function () {
       if (!cartId) { if (EH.onCart) EH.onCart(null); return; }
       gql("query($id:ID!){cart(id:$id)" + CART + "}", { id: cartId }).then(function (d) {
