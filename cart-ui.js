@@ -48,6 +48,13 @@
     else if (e.target.closest('[data-eh="line-remove"]')) EH.remove(lid);
   });
 
-  if (document.readyState !== "loading") EH.load();
-  else document.addEventListener("DOMContentLoaded", function () { EH.load(); });
+  function start() {
+    // Re-parent the drawer to <body> so position:fixed is relative to the viewport
+    // (it's authored inside nav_component, which has a transform → would otherwise contain it).
+    var d = document.querySelector('[data-eh="cart-drawer"]');
+    if (d && d.parentElement !== document.body) document.body.appendChild(d);
+    EH.load();
+  }
+  if (document.readyState !== "loading") start();
+  else document.addEventListener("DOMContentLoaded", start);
 })();
